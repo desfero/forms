@@ -8,9 +8,10 @@ class ContactFormBase extends Component {
     emailValidator = combineValidators(validators.required, validators.email);
     phoneValidator = combineValidators(validators.required, validators.phone);
 
-    submit(values) {
-        // TODO find solution for invoking submit function inside form component
-        console.log(values);
+    submit = values => {
+        if (this.props.valid) {
+            this.props.reset();
+        }
     };
 
     render() {

@@ -13,7 +13,7 @@ export class Input extends Component {
                   onChange,
                   onBlur
               })}
-              {touched && error.map((error, i) => <div key={i}>{error}</div>)}
+              {touched && error && error.map((error, i) => <div key={i}>{error}</div>)}
           </label>
       );
   }
