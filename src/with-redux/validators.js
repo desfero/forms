@@ -11,4 +11,8 @@ function email(value) {
         .test(value) ? [] : ['This email address is invalid'];
 }
 
+export function combineValidators(...validators) {
+    return value => validators.map(validator => validator(value)).reduce((acc, error) => [...acc, ...error], []);
+}
+
 export const validators = { required, email, phone };
