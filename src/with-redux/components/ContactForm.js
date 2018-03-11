@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {Input} from "./Input";
 import {Field, formValues, reduxForm} from "redux-form";
 
-import {validators, combineValidators} from '../validators';
+import {Input} from "./Input";
+import {combineValidators, validators} from '../validators';
 
 class ContactFormBase extends Component {
     emailValidator = combineValidators(validators.required, validators.email);

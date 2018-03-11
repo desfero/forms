@@ -13,12 +13,12 @@ function email(value) {
 
 export function combineValidators(...validators) {
     return (...args) => {
-      const errors = validators
-          .map(validator => validator(...args))
-          .filter(value => !!value)
-          .reduce((acc, error) => [...acc, ...error], []);
-      return errors.length ? errors : undefined;
+        const errors = validators
+            .map(validator => validator(...args))
+            .filter(value => !!value)
+            .reduce((acc, error) => [...acc, ...error], []);
+        return errors.length ? errors : undefined;
     };
 }
 
-export const validators = { required, email, phone };
+export const validators = {required, email, phone};
