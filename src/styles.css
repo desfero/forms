@@ -3,8 +3,8 @@ html {
 }
 
 label {
-  display: block;
-  margin-bottom: 1em;
+    display: block;
+    margin-top: 1em;
 }
 
 input,
@@ -13,17 +13,18 @@ textarea {
   display: block;
 }
 
-input ~ div,
-textarea ~ div {
-  color: red;
-  font-size: 0.8rem;
-  margin-top: 0.4em;
+.form-control {
+  margin: 5px;
 }
 
-button,
-input:not([type="file"]),
-textarea {
-  padding: 1em;
-  border-radius: 0.2em;
-  border: 1px lightgrey solid;
+span.error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.4em;
+}
+
+button, input:not([type="file"]), textarea {
+    padding: 1em;
+    border-radius: 0.2em;
+    border: 1px lightgrey solid;
 }
