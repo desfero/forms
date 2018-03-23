@@ -1,143 +1,75 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Input } from "./Input";
-import { update, reset } from "../actions";
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {reset, update} from "../actions";
+import NewContactForm from './NewContactForm';
+import { SubmissionError } from 'redux-form';
+import {validators} from "../validators";
 
 class ContactFormBase extends Component {
-  state = {
-    validations: []
-  };
+    state = {
+        validations: []
+    };
 
-  registerValidation = isValidFunc => {
-    this.setState(s => ({ validations: s.validations.concat([isValidFunc]) }));
-    return () => this.removeValidation(isValidFunc);
-  };
+    registerValidation = isValidFunc => {
+        this.setState(s => ({validations: s.validations.concat([isValidFunc])}));
+        return () => this.removeValidation(isValidFunc);
+    };
 
-  removeValidation = ref => {
-    this.setState(s => ({ validations: s.validations.filter(f => f === ref) }));
-  };
+    removeValidation = ref => {
+        this.setState(s => ({validations: s.validations.filter(f => f === ref)}));
+    };
 
-  isFormValid = showErrors => {
-    return this.state.validations.reduce((p, c) => c(showErrors) && p, true);
-  };
+    isFormValid = showErrors => {
+        return this.state.validations.reduce((p, c) => c(showErrors) && p, true);
+    };
 
-  submit = event => {
-    event.preventDefault();
+    submit = values => {
+        if(!values.yourname || values.yourname.length === 0) {
+            throw new SubmissionError({
+                yourname: 'This Field is required',
+                _error:  'Sending contact request filed'
+            });
+        } else if(!values.email || values.email.length === 0) {
+            throw new SubmissionError({
+                email: 'This Field is required',
+                _error:  'Sending contact request filed'
+            });
+        } else if (!!values.email && !validators.isEmailValid(values.email)) {
+            throw new SubmissionError({
+                email: 'Email address is invalid',
+                _error:  'Sending contact request filed'
+            });
+        } else if(!values.question || values.question.length === 0) {
+            throw new SubmissionError({
+                question: 'This Field is required',
+                _error:  'Sending contact request filed'
+            });
+        } else if(!!values.canphone && (!values.phoneNumber || values.phoneNumber.length === 0) ) {
+            throw new SubmissionError({
+                phoneNumber: 'This Field is required',
+                _error:  'Sending contact request filed'
+            });
+        } else if (!!values.canphone && !validators.phone(values.phoneNumber)){
+            throw new SubmissionError({
+                phoneNumber: 'Phone number is incorrect',
+                _error:  'Sending contact request filed'
+            });
+        } else {
+            alert("Send Form");
+        }
+    };
 
-    if (this.isFormValid(true)) {
-      // this.props.onSubmit(assign({}, this.props.values));
-      this.props.reset();
+    render() {
+        return (
+            <div>
+                <NewContactForm onSubmit={this.submit}/>
+            </div>
+        )
     }
-  };
-
-  render() {
-    return (
-      <form>
-        <Input
-          registerValidation={this.registerValidation}
-          value={this.props.fields.name}
-          name="name"
-          onChange={this.props.update}
-          validate={["required"]}
-          placeholder="Type your name here"
-          label="Your name"
-        >
-          {({ value, onChange, onBlur, placeholder }) => (
-            <input
-              placeholder={placeholder}
-              value={value}
-              onChange={e => onChange(e.target.value)}
-              onBlur={onBlur}
-            />
-          )}
-        </Input>
-
-        <Input
-          registerValidation={this.registerValidation}
-          value={this.props.fields.email}
-          onChange={this.props.update}
-          name="email"
-          validate={["required", "email"]}
-          placeholder="Type your email here"
-          label="E-mail"
-        >
-          {({ value, onChange, onBlur, placeholder }) => (
-            <input
-              placeholder={placeholder}
-              value={value}
-              onChange={e => onChange(e.target.value)}
-              onBlur={onBlur}
-            />
-          )}
-        </Input>
-
-        <Input
-          registerValidation={this.registerValidation}
-          value={this.props.fields.question}
-          onChange={this.props.update}
-          name="question"
-          validate={["required"]}
-          placeholder="Type your question here"
-          label="Question"
-        >
-          {({ value, onChange, onBlur, placeholder }) => (
-            <textarea
-              placeholder={placeholder}
-              value={value}
-              onChange={e => onChange(e.target.value)}
-              onBlur={onBlur}
-            />
-          )}
-        </Input>
-
-        <Input
-          registerValidation={this.registerValidation}
-          value={this.props.fields.canContactByPhone}
-          onChange={this.props.update}
-          defaultValue={false}
-          name="canContactByPhone"
-          label="Can contact by phone number?"
-        >
-          {({ value, onChange }) => (
-            <input
-              type="checkbox"
-              checked={value}
-              onChange={e => onChange(e.target.checked)}
-            />
-          )}
-        </Input>
-
-        {this.props.fields.canContactByPhone && (
-          <Input
-            registerValidation={this.registerValidation}
-            value={this.props.fields.phone}
-            onChange={this.props.update}
-            name="phone"
-            validate={["required", "phone"]}
-            placeholder="Type your phone number"
-            label="Phone number"
-          >
-            {({ value, onChange, onBlur, placeholder }) => (
-              <input
-                placeholder={placeholder}
-                value={value}
-                onChange={e => onChange(e.target.value)}
-                onBlur={onBlur}
-              />
-            )}
-          </Input>
-        )}
-
-        <button type="submit" onClick={this.submit}>
-          Submit
-        </button>
-      </form>
-    );
-  }
 }
 
 export const ContactForm = connect(
-  state => ({ fields: state.contactForm }),
-  dispatch => bindActionCreators({ update, reset }, dispatch)
+    state => ({contactForm: state.contactForm}),
+    dispatch => bindActionCreators({update, reset}, dispatch)
 )(ContactFormBase);

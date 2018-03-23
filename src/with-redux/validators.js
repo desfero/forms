@@ -3,7 +3,7 @@ function required(value) {
 }
 
 function phone(value) {
-    return /^\d*$/.test(value) ? [] : ['This phone number is invalid'];
+    return /^\d*$/.test(value);
 }
 
 function email(value) {
@@ -11,4 +11,9 @@ function email(value) {
         .test(value) ? [] : ['This email address is invalid'];
 }
 
-export const validators = { required, email, phone };
+function isEmailValid(value) {
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        .test(value);
+}
+
+export const validators = { required, email, phone, isEmailValid };
