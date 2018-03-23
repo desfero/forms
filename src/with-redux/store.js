@@ -1,25 +1,36 @@
-import {FORM_RESET, FORM_UPDATE_VALUE} from './actions';
+import {reducer as reduxFormReducer} from 'redux-form';
+import {combineReducers, createStore} from 'redux';
 
-const initialState = {
-    contactForm: {}
-};
+// const initialState = {
+//     contactForm: {},
+// };
 
-export const store = (state = initialState, action) => {
-    switch (action.type) {
+// export const store = (state = initialState, action) => {
+//     switch (action.type) {
+//
+//         case FORM_UPDATE_VALUE:
+//             return {
+//                 ...state,
+//                 contactForm: {
+//                     ...state.contactForm,
+//                     [action.payload.name]: action.payload.value,
+//                 }
+//             };
+//
+//         case FORM_RESET:
+//             return initialState;
+//
+//         default:
+//             return state;
+//     }
+// };
 
-        case FORM_UPDATE_VALUE:
-            return {
-                ...state,
-                contactForm: {
-                    ...state.contactForm,
-                    [action.payload.name]: action.payload.value,
-                }
-            };
+const reducer = combineReducers({
+    form: reduxFormReducer
+});
 
-        case FORM_RESET:
-            return initialState;
+export const store = (window.devToolsExtension
+    ? window.devToolsExtension()(createStore)
+    : createStore)(reducer);
 
-        default:
-            return state;
-    }
-};
+
