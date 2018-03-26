@@ -6,6 +6,7 @@ import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 import {Controlled} from './controlled';
 import {Uncontrolled} from './uncontrolled';
 import {WithRedux} from './with-redux';
+import {WithReduxForm} from "./with-redux-form";
 
 const App = () => (
     <BrowserRouter>
@@ -50,12 +51,16 @@ const App = () => (
                         <li>
                             <Link to="with-redux/contact-form">With redux</Link>
                         </li>
+                        <li>
+                            <Link to="with-redux-form/contact-page">With Redux Form</Link>
+                        </li>
                     </ul>
                 )}
             />
             <Route path="/controlled" component={Controlled}/>
             <Route path="/uncontrolled" component={Uncontrolled}/>
             <Route path="/with-redux" component={WithRedux}/>
+            <Route path="/with-redux-form" component={WithReduxForm}/>
         </Switch>
     </BrowserRouter>
 );
